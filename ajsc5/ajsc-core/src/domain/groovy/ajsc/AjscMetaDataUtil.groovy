@@ -3,6 +3,8 @@ package ajsc;
 import groovy.json.JsonSlurper
 import groovy.json.JsonBuilder
 
+import java.text.SimpleDateFormat
+
 public class AjscMetaDataUtil {
 	
 	static def dataFields = { cl ->
@@ -59,7 +61,8 @@ public class AjscMetaDataUtil {
 			// we only want to set the value if it's not-null
 			if (newVal != null) {
 				if (it.type.canonicalName == "java.util.Date") {
-					newVal = Date.parse("yyyy-MM-dd'T'HH:mm:ssZ",newVal) //e.g. 2013-10-17T13:49:09+0000
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+					newVal = sdf.parse(newVal) //e.g. 2013-10-17T13:49:09+0000
 				}
 				try {
 					newObj."$it.name" = newVal

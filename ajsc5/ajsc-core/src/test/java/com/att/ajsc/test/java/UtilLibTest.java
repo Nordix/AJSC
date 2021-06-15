@@ -73,12 +73,7 @@ public class UtilLibTest {
 	public void shouldReturnErrorResponse(){
 		assertEquals(CommonNames.BODY_TYPE_JSON,UtilLib.getErrorResponseBodyType("key:value;key2:value2"));
 	}
-	
-	@Test
-	public void shouldReturnStartTime(){
-		assertTrue(UtilLib.getStartTimestamp("100").contains("1969-12-31"));
-	}
-	
+
 	@Test
 	public void shouldReturnService(){
 		System.setProperty("APP_SERVLET_URL_PATTERN","servlet:/*");

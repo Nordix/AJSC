@@ -2,21 +2,24 @@
  * Copyright (c) 2016 AT&T Intellectual Property. All rights reserved.
  *******************************************************************************/
 package ajsc
+
+import ajsc.http4.AjscHttpHeaderFilterStrategy
+import ajsc.rest.AjscRestletHeaderFilterStrategy
+import ajsc.util.AjscTemplateEngine
+import ajsc.util.MessageMgr
+import ajsc.utils.DME2Helper
+import ajsc.utils.SystemErrorHandlerUtil
+import com.att.aft.dme2.api.DME2Manager
+import com.att.ajsc.beans.PropertiesMapBean
+import com.att.ajsc.csi.restmethodmap.RefresheableSimpleRouteMatcher
 import grails.spring.BeanBuilder
-
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Unmarshaller
-
-import java.util.Properties
-
-import org.apache.camel.*
-import org.apache.camel.builder.*
+import org.apache.camel.CamelContext
+import org.apache.camel.Endpoint
+import org.apache.camel.ProducerTemplate
+import org.apache.camel.ThreadPoolRejectedPolicy
 import org.apache.camel.component.ejb.EjbComponent
-import org.apache.camel.model.*
-import org.apache.camel.model.config.*
-import org.apache.camel.model.dataformat.*
-import org.apache.camel.model.language.*
-import org.apache.camel.model.loadbalancer.*
+import org.apache.camel.model.FromDefinition
+import org.apache.camel.model.RouteDefinition
 import org.apache.camel.spi.ExecutorServiceManager
 import org.apache.camel.spi.InterceptStrategy
 import org.apache.camel.spi.ThreadPoolProfile
@@ -28,18 +31,9 @@ import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
-import ajsc.common.CommonNames;
-import ajsc.http4.AjscHttpHeaderFilterStrategy
-import ajsc.rest.AjscRestletHeaderFilterStrategy
-import ajsc.util.AjscTemplateEngine
-import ajsc.util.MessageMgr
-import ajsc.utils.DME2Helper
-import ajsc.utils.SystemErrorHandlerUtil
-
-import com.att.aft.dme2.api.DME2Manager
-import com.att.ajsc.beans.PropertiesMapBean
-import com.att.ajsc.csi.restmethodmap.RefresheableSimpleRouteMatcher;
-
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Unmarshaller
+import java.nio.file.Paths
 
 /**
  * ComputeService - Wrapper for Apache Camel
@@ -249,7 +243,13 @@ class ComputeService implements ApplicationContextAware {
 		def loader = null;
 		if(isOSGIEnable ==false)
 		{
-			 loader= URLClassLoader.newInstance(appCtx.getClassLoader().getURLs(), appCtx.getClassLoader())
+			String classpath = System.getProperty("java.class.path");
+			String[] entries = classpath.split(File.pathSeparator);
+			URL[] urls = new URL[entries.length];
+			for(int i = 0; i < entries.length; i++) {
+				urls[i] = Paths.get(entries[i]).toAbsolutePath().toUri().toURL();
+			}
+			 loader= URLClassLoader.newInstance(urls, appCtx.getClassLoader())
 
 			// Load jars from AJSC_HOME/lib
 			UserDefinedJar.findAllByContextId(ctxKey).each { userDefinedJar ->

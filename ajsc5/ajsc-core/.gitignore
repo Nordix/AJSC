@@ -1,1 +1,4 @@
 /target
+.classpath
+.project
+/dme2-fs-registry/

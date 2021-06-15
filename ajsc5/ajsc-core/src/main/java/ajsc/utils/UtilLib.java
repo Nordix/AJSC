@@ -3,22 +3,16 @@
  *******************************************************************************/
 package ajsc.utils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
-import java.util.Date;
+import ajsc.common.CommonNames;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import ajsc.common.CommonNames;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.xmlbeans.XmlCalendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.AntPathMatcher;
@@ -127,26 +121,6 @@ public class UtilLib {
 			// Do nothing - just use Json
 		}
 		return CommonNames.BODY_TYPE_JSON;
-	}
-
-	public static String getStartTimestamp(String epoch) {
-		long stime = Long.parseLong((String) epoch);
-		XmlCalendar cal = new XmlCalendar(new Date(stime));
-		XMLGregorianCalendar initTime = null;
-		try {
-			initTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-					cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
-					cal.get(Calendar.DAY_OF_MONTH),
-					cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
-					cal.get(Calendar.SECOND), cal.get(Calendar.MILLISECOND),
-					Math.round(cal.get(Calendar.ZONE_OFFSET) / 1000 / 60));
-		} catch (Exception ex) {
-			initTime = null;
-		}
-		if (initTime == null)
-			return null;
-		else
-			return initTime.toString();
 	}
 
 	public static String getServiceName(String servletPath, String pathInfo) {

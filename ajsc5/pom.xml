@@ -5,7 +5,7 @@
 
 	<groupId>com.att.ajsc</groupId>
 	<artifactId>ajsc</artifactId>
-	<version>3.0.10-oss</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<name>AJSC</name>
@@ -29,6 +29,7 @@
    </developers>
    
 	<properties>
+		<revision>3.2.0-oss</revision>
 		<!-- unify the encoding for all the modules -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -39,7 +40,7 @@
 		<ATTCamelComponent.version>2.16.2-oss</ATTCamelComponent.version>
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<spring.security.version>4.2.4.RELEASE</spring.security.version>
-		<groovy.version>2.4.8</groovy.version>
+		<groovy.version>3.0.7</groovy.version>
 		<restlet.version>2.2.1</restlet.version>
 		<camel.version>2.21.1</camel.version>
 		<dme2.version>3.1.200-oss</dme2.version>
@@ -51,7 +52,6 @@
 	<modules>
 		<module>ajsc-archetype-parent</module>
 		<module>ajsc-archetype</module>
-		<module>ajsc-surfsup-archetype</module>
 		<module>ajsc-bom</module>
 		<module>ajsc-core</module>
 		<module>ajsc-api</module>

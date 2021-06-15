@@ -328,8 +328,5 @@ class RouteMgmtService {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-
-		URL[] urls = clu.getURLsFromTheCurrentThreadLoader(Thread.currentThread().getContextClassLoader())
-
 	}
 }

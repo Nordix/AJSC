@@ -1,0 +1,7 @@
+ajsc-*/.classpath
+ajsc-*/.project
+ajsc-core/dme2-fs-registry/*
+.classpath
+.project
+.settings/
+target/

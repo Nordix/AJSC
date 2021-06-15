@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import java.nio.file.Paths;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,9 +72,15 @@ public class ClassLoaderUtil {
 	 */
 	public void addURL(URL u, ClassLoader cl) throws IOException {
 
-		URL urls[] = ((URLClassLoader) cl).getURLs();
-		for (int i = 0; i < urls.length; i++) {
-			if (StringUtils.equalsIgnoreCase(urls[i].toString(), u.toString())) {
+		String classpath = System.getProperty("java.class.path");
+		String[] entries = classpath.split(File.pathSeparator);
+		URL[] urls = new URL[entries.length];
+		for(int i = 0; i < entries.length; i++) {
+			urls[i] = Paths.get(entries[i]).toAbsolutePath().toUri().toURL();
+		}
+
+		for (URL url : urls) {
+			if (StringUtils.equalsIgnoreCase(url.toString(), u.toString())) {
 				logger.info("URL " + u + " is already in the CLASSPATH");
 				return;
 			}
@@ -87,29 +94,4 @@ public class ClassLoaderUtil {
 			logger.error("Error, could not add URL to system classloader:", t);
 		}
 	}
-
-	public URL[] getURLsFromTheCurrentThreadLoader(ClassLoader cl) {
-		StringBuffer str = new StringBuffer(
-				"\n\n ********->Current Context Loader ClassPath<-*********\n");
-
-		URL[] urls = ((URLClassLoader) cl).getURLs();
-
-		for (URL url : urls) {
-			str.append(url.getFile()+"\n");
-		}
-		//System.out.println(str);
-		logger.info(str.toString());
-		StringBuffer slStr = new StringBuffer(
-				"\n\n ********->Current System Loader ClassPath<-*********\n");
-		ClassLoader sl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-	    urls = ((URLClassLoader) sl).getURLs();
-
-		for (URL url : urls) {
-			slStr.append(url.getFile()+"\n");
-		}
-		//System.out.println(slStr);
-		logger.info(slStr.toString());	
-		return urls;
-	}
-
 }
